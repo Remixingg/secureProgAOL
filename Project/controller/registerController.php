@@ -1,21 +1,6 @@
 <?php
     session_start();
     require '../config/connect.php';
-    
-    // if(isset($_POST["submit"])){
-    //     $email = $_POST["email"];
-    //     $password = $_POST["password"];
-    //     $duplicate = mysqli_query($conn, "SELECT * FROM users WHERE username = '$username'");
-    //     if(mysqli_num_rows($duplicate) > 0){
-    //         echo
-    //         "<script> alert('Email or Username or Phone Number has already taken'); </script>";
-    //     }
-    //     else{
-    //         $query = "INSERT INTO users VALUES (4, '$username', '$password')";
-    //         mysqli_query($conn, $query);
-    //         echo "<script> alert('Registration Success');</script>";
-    //     }
-    // }
 
     if ($_SERVER["REQUEST_METHOD"]==="POST"){
 
@@ -32,17 +17,20 @@
         } else {
             $query = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $insertQuery->bind_param("ss", $username, $hashedPassword);
+            $query->bind_param("ss", $username, $hashedPassword);
     
-            if ($insertQuery->execute()) {
+            if ($query->execute()) {
                 echo "Registration success!";
+                header("Location: ../view/login.php");
             } else {
                 echo "Registration error!";
+                $_SESSION['error_message'] = "Invalid Credentials!";
+                header("Location: ../view/register.php?error=1");
             }
+            $query->close();
         }
 
         $checkQuery->close();
-        $insertQuery->close();
     }
 
 

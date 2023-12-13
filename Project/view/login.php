@@ -12,11 +12,11 @@
 
     <?php
         if(isset($_SESSION['error_message'])) {
-            if($_GET['error']) {
+            // if($_GET['error']) {
                 $error_message = $_SESSION['error_message'];
                 echo "<div>$error_message</div>";
                 unset($_SESSION['error_message']);
-            }
+            // }
         }
     ?>
 

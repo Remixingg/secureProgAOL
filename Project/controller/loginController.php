@@ -4,9 +4,10 @@
 
     function loginHandler($username, $password){
         global $conn;
-        $query = "SELECT * FROM users WHERE username=? AND password=?;";
+        $query = "SELECT * FROM users WHERE username=?;";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ss", $username, $password);
+        // $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $stmt->bind_param("s", $username);
 
         $stmt->execute();
         $result = $stmt->get_result();
@@ -22,11 +23,17 @@
 
         if ($login_result->num_rows == 1) {
             $data = $login_result->fetch_assoc();
-            $_SESSION["success_message"] = "Hello, $username";
-            $_SESSION['is_login'] = true;
-            $_SESSION['userID'] = $data["userID"];
-            $_SESSION['username'] = $data["username"];
-            header("Location: ../view/home.php");
+            if(password_verify($password, $data['password'])){
+                $_SESSION["success_message"] = "Hello, $username";
+                $_SESSION['is_login'] = true;
+                $_SESSION['userID'] = $data["userID"];
+                $_SESSION['username'] = $data["username"];
+                header("Location: ../view/home.php");
+            }
+            else {
+                $_SESSION['error_message'] = "Invalid Credentials!";
+                header("Location: ../view/login.php?error=1");
+            }
         }
         else {
             $_SESSION["error_message"] = "Invalid Credentials!";
