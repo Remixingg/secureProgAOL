@@ -32,13 +32,19 @@
 
             // DESCRIPTION
             if(strlen($description)>=50){
-                $msg_error = "desc must be < 50 char";  
-                echo $msg_error;
+                // $msg_error = "desc must be < 50 char";  
+                // echo $msg_error;
+                $_SESSION['document_error'] = "Description Must Be Less Than 50 Characters!";
+                header("Location: ../view/add.php?error=1");
+                exit();
             }
             $description_trim = trim($description);
             if ($description == '' || empty($description) || empty($description_trim)) {
-                $msg_error = "desc mustn't be empty!";
-                echo $msg_error;
+                // $msg_error = "desc mustn't be empty!";
+                // echo $msg_error;
+                $_SESSION['document_error'] = "Description Must Not Be Empty!";
+                header("Location: ../view/add.php?error=1");
+                exit();
             }
 
             
@@ -54,14 +60,20 @@
                 // size
                 $maxSize = 7 * 1024 * 1024;
                 if($user_attachment['size'] <= 0 || $user_attachment['size'] > $maxSize){
-                    echo "document too small/big";
-                    exit;
+                    // echo "document too small/big";
+                    // exit;
+                    $_SESSION['document_error'] = "Document Size Is Too Small/Big!";
+                    header("Location: ../view/add.php?error=1");
+                    exit();
                 }
         
                 // extension
-                $allowed_extension = array("jpeg", "png", "pdf");
+                $allowed_extension = array("jpeg", "png", ".jpg");
                 if(!in_array($fileExtension, $allowed_extension)){
-                    echo "document invalid extension";
+                    // echo "document invalid extension";
+                    $_SESSION['document_error'] = "Invalid Document Extension!";
+                    header("Location: ../view/add.php?error=1");
+                    exit();
                 }
         
                 $time = time();
@@ -94,7 +106,9 @@
             }
 
             else {
-                exit;
+                $_SESSION['document_error'] = "Error!";
+                header("Location: ../view/add.php?error=1");
+                exit();
             }
 
             // $result = $conn->query($query);

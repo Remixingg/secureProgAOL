@@ -27,9 +27,6 @@
             <li name="view">
                 <a href="view.php">View</a>
             </li>
-            <!-- <li name="update">
-                <a href="../controller/logoutController.php">Logout</a>
-            </li> -->
             
         </ul>
         

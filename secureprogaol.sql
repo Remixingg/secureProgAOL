@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 13, 2023 at 10:06 AM
+-- Generation Time: Dec 16, 2023 at 05:50 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -39,13 +39,31 @@ CREATE TABLE `document` (
 --
 
 INSERT INTO `document` (`id`, `userID`, `description`, `image`) VALUES
-(1, '1', 'asdasda', '../storage/aa2'),
-(2, '1', 'asdasda', '../storage/20231007_090629'),
-(3, '1', 'asdasda', '../storage/20231007_090629'),
-(4, '1', 'aaa', './storage/1702445405aa2.png'),
-(5, '1', 'aaa', './storage/1702445426aa2.png'),
-(6, '1', '11231', './storage/1702445618list.jpg'),
-(7, '1', '1', './storage/170244644720231007_090629.jpg');
+(13, NULL, 'asdasdasd', './storage/1702702064Upside_Down_Steve.png');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `password`) VALUES
+(1, 'michael', '$2y$10$rUgwM/qsrhu.umaw3QhWGuUm4s7l17Md5S2Q9CkwyIj0mUF5Cil/i'),
+(2, 'adam', '$2y$10$RPG/.vNVPTx.WXIdlW2Yz.Xa7lkSzF1dw9FXRdG0UgeOn8BVls4k2'),
+(3, 'lawrence', '$2y$10$5g/3Kyy0IwJFsisVask0GuYdkI2n/1Vv8DLGdW8/yVmvn1R7rm6Zy'),
+(4, 'a', '$2y$10$nxi049wiiAVFw/XzVlXtBu8xFz4a4txbo19PS.aMKVmzdOERQpKCa'),
+(5, 'rem', '$2y$10$mpE71JQaadRdw65569CN9O7pEkNMnP8PXWBRjx9gJB2oUqBDPK/4q'),
+(6, 'test', '$2y$10$1L0ARFkDtg1qvf8J647WduaMsvpYS4xifkG.EYQJtlPb4TytcoWsG');
 
 --
 -- Indexes for dumped tables
@@ -58,6 +76,12 @@ ALTER TABLE `document`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -65,7 +89,13 @@ ALTER TABLE `document`
 -- AUTO_INCREMENT for table `document`
 --
 ALTER TABLE `document`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

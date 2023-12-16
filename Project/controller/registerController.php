@@ -13,18 +13,20 @@
         $checkQuery->store_result();
     
         if ($checkQuery->num_rows > 0) {
-            echo "<div>Username must be unique</div>";
+            // echo "<div>Username must be unique</div>";
+            $_SESSION['error_message_register'] = "Username must be unique!";
+            header("Location: ../view/register.php?error=1");
         } else {
             $query = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             $query->bind_param("ss", $username, $hashedPassword);
     
             if ($query->execute()) {
-                echo "Registration success!";
+                $_SESSION['error_message'] = "Registration success!";
                 header("Location: ../view/login.php");
             } else {
                 echo "Registration error!";
-                $_SESSION['error_message'] = "Invalid Credentials!";
+                $_SESSION['error_message_register'] = "Invalid Credentials!";
                 header("Location: ../view/register.php?error=1");
             }
             $query->close();

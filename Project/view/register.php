@@ -1,4 +1,5 @@
 <?php
+    session_start();
     require '../config/connect.php';
     if(!empty($_SESSION["id"])){
         header("Location: index.php");
@@ -29,6 +30,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VaccMe | Register</title>
 </head>
+
+<?php
+    // var_dump($_SESSION['error_message_register']);
+    // die();
+    if(isset($_SESSION['error_message_register'])) {
+        // if($_GET['error']) {
+            $error_message = $_SESSION['error_message_register'];
+            echo "<div>$error_message</div>";
+            unset($_SESSION['error_message_register']);
+        // }
+    }
+?>
 
 <body>
     <form method="POST" action="../controller/registerController.php">
