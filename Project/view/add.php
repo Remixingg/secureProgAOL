@@ -3,6 +3,22 @@
     if(!$_SESSION['is_login']){
         header("Location: login.php");  
     }
+    if(!isset($_SESSION['csrf_token'])){
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    // timeout
+    $session_timeout = 2 * 60 * 60;
+    if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $session_timeout)) {
+        session_unset();
+        session_destroy();
+        header("Location: login.php");
+    }
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+            header("Location: error.php");
+            exit;
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -44,6 +60,7 @@
         <form action="../controller/documentController.php" method="POST" enctype="multipart/form-data">
             <input type="text" name="description" placeholder="description">
             <input type="file" name="user_file" accept=".jpg, .jpeg, .png" id="file">
+            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
             <input type="submit" name="submit" value="Add">
         </form>
     </div>

@@ -4,6 +4,9 @@
     if(!empty($_SESSION["id"])){
         header("Location: index.php");
     }
+    if(!isset($_SESSION['csrf_token'])){
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
 
     if(isset($_POST["submit"])){
         $email = $_POST["email"];
@@ -56,6 +59,8 @@
                 <input type="password" name="password" placeholder="Password" id="password"><br>
             </div>
             
+            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
+
             <div>
                 <button type="submit" name="submit">Register</button>
             </div>

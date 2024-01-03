@@ -3,6 +3,16 @@
     if(!$_SESSION['is_login']){
         header("Location: login.php");  
     }
+    if(!isset($_SESSION['csrf_token'])){
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    // timeout
+    $session_timeout = 2 * 60 * 60;
+    if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $session_timeout)) {
+        session_unset();
+        session_destroy();
+        header("Location: login.php");
+    }
 ?>
 
 <!DOCTYPE html>

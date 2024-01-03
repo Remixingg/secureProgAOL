@@ -6,6 +6,13 @@
         header("Location: login.php");  
     }
 
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+            header("Location: error.php");
+            exit;
+        }
+    }
+
     if($_SERVER['REQUEST_METHOD']==="POST"){
         if (isset($_POST['submit'])) {
             $userID = $_SESSION['userID'];

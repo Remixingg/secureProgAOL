@@ -28,6 +28,12 @@
                 $_SESSION['is_login'] = true;
                 $_SESSION['userID'] = $data["userID"];
                 $_SESSION['username'] = $data["username"];
+                
+                // session timeout
+                $session_timeout = 2 * 60 * 60;
+                session_set_cookie_params($session_timeout);                
+                $_SESSION['last_activity'] = time();
+
                 header("Location: ../view/home.php");
             }
             else {

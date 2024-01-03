@@ -1,5 +1,8 @@
 <?php
     session_start();
+    if(!isset($_SESSION['csrf_token'])){
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
 ?>
 
 <!DOCTYPE html>
@@ -32,6 +35,8 @@
                     <input type="password" name="password" placeholder="Password" id="password"><br>
                 </div>
                 
+                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
+
                 <div>
                     <button type="submit" name="submit">LOGIN</button>
                 </div>

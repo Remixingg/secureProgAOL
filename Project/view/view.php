@@ -5,10 +5,25 @@
         header("Location: login.php");  
     }
 
+    // timeout
+    $session_timeout = 2 * 60 * 60;
+    if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $session_timeout)) {
+        session_unset();
+        session_destroy();
+        header("Location: login.php");
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+            header("Location: error.php");
+            exit;
+        }
+    }
+
     // update
     if($_SERVER["REQUEST_METHOD"]==="POST" && isset($_POST['update'])){
         $idToUpdate = $_POST['id'];
-        $newDescription = $_POST['newDescription'];
+        $newDescription = htmlspecialchars($_POST['newDescription']); // Use htmlspecialchars to prevent XSS
 
         if (!empty($newDescription) && strlen($newDescription) <= 50) {
             $updateQuery = "UPDATE document SET description = ? WHERE id = ?";
@@ -42,9 +57,6 @@
 
 ?>
 
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,14 +66,13 @@
 </head>
 
 <?php
-    // var_dump($_SESSION['error_message_register']);
-    // die();
     if(isset($_SESSION['update_error'])) {
-        // if($_GET['error']) {
-            $error_message = $_SESSION['update_error'];
-            echo "<div>$error_message</div>";
-            unset($_SESSION['update_error']);
-        // }
+        $error_message = $_SESSION['update_error'];
+        echo "<div>$error_message</div>";
+        unset($_SESSION['update_error']);
+    }
+    if(!isset($_SESSION['csrf_token'])){
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
 ?>
 
@@ -90,14 +101,15 @@
         <tr>
         <div style="display: flex; flex-direction: row;">
             <div style="display: flex; flex-direction: row;">
-                <td>UserID: <?php echo $row['userID'] ?></td>
-                <td>Description:<?php echo $row['description'] ?></td>
-                <td>Image:<img style="width: 11vw;" src=".<?php echo $row['image']?>"></td>
+                <td>UserID: <?php echo htmlspecialchars($row['userID']); ?></td>
+                <td>Description: <?php echo htmlspecialchars($row['description']); ?></td>
+                <td>Image: <img style="width: 11vw;" src=".<?php echo htmlspecialchars($row['image']); ?>"></td>
             </div>
             <form action="view.php" method="post">
                 <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
                 <label for="newDescription">New Description:</label>
                 <input type="text" name="newDescription" required>
+                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
                 <input type="submit" name="update" value="Update">
                 <input type="submit" name="delete" value="Delete" onclick="return confirm('Are you sure you want to delete this document?')">
             </form>
